@@ -10,5 +10,6 @@ urlpatterns = [
     path('login-vendor/', views.login_vendor, name='login_vendor'),
     path('register-vendor/', views.register_vendor, name='register_vendor'),
     path('dashboard/', views.dashboard, name="dashboard"),
+    path('add-hotel/', views.add_hotel, name = "add_hotel"),
     path('register/<token>/', views.verify_email_token, name='verify_email_token')
 ]

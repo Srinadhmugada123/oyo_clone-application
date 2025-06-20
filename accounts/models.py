@@ -30,6 +30,9 @@ class Ameneties(models.Model):
     name = models.CharField(max_length = 1000)
     icon = models.ImageField(upload_to="hotels")
 
+    def __str__(self):
+        return self.name
+
 class Hotel(models.Model):
     hotel_name  = models.CharField(max_length = 100)
     hotel_description = models.TextField()

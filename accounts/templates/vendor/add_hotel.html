@@ -1,0 +1,42 @@
+{% extends "utils/vendor_base.html" %}
+
+{% block start %}
+
+
+
+<div class="container mt-5 pt-5 pb-5">
+
+  <div class="col-6 mx-auto card shadow p-4" style="border:none">
+    <h2>ADD HOTEL</h2>
+        <form method="POST">
+        {% include "utils/alerts.html" %}
+        {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Hotel Name</label>
+            <input id="email" type="hotel_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+          <div class="form-floating">
+            <textarea name="hotel_description" class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+            <label for="floatingTextarea">Hotel Description</label>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Hotel Price</label>
+            <input type="number" name="hotel_price" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Hotel Offer Price</label>
+            <input type="number" name="hotel_offer_price" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Hotel location</label>
+            <input type="text" name="hotel_location" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+
+        </form>
+
+
+    </div>
+</div>
+
+{% endblock %}
