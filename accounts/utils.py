@@ -41,10 +41,10 @@ def sendOTPtoEmail(email, otp):
     )
 
 
-def generateslug(instance):
-    slug = slugify(instance.hotel_name) + str(uuid.uuid4()).split('-')[0]
-    if Hotel.objects.filter(slug = slug).exists():
-        return generateslug(instance)
+def generateslug(hotel_name):
+    slug = f"{slugify(hotel_name)}=" + str(uuid.uuid4()).split('-')[0]
+    if Hotel.objects.filter(hotel_slug= slug).exists():
+        return generateslug(hotel_name)
     return slug
 
 

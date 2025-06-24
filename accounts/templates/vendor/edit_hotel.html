@@ -14,16 +14,15 @@
 
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Hotel Name</label>
-            <input type="text" name="hotel_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="text" value="{{hotel.hotel_name}}" name="hotel_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
           </div>
           <label for="floatingTextarea">Hotel Description</label>
           <div class="form-floating">
             <textarea name="hotel_description" class="form-control" placeholder="Leave a comment here" id="flora"></textarea>
-            
           </div>
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Hotel Price</label>
-            <input type="number" name="hotel_price" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="number" value="{{hotel.hotel_price}}" name="hotel_price" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
           </div>
            <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Hotel ameneties</label>
@@ -31,18 +30,18 @@
               <select name="ameneties" class="form-select form-select-sm" multiple aria-label="Small select example">
                 {% for amenetie in ameneties %}
 
-                <option value="{{amenetie.id}}">{{amenetie.name}}</option>
+                <option value="{{amenetie.id}}" {% if amenetie in hotel.ameneties.all %} selected  {% endif %}>{{amenetie.name}}</option>
 
                 {% endfor %}
               </select>
             </div>
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Hotel Offer Price</label>
-            <input type="number" name="hotel_offer_price" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="number" value="{{hotel.hotel_offer_price}}" name="hotel_offer_price" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
           </div>
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Hotel location</label>
-            <input type="text" name="hotel_location" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="text" value="hotel.hotel_location" name="hotel_location" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
 
@@ -51,7 +50,8 @@
 
     </div>
 </div>
-<script>
+ <script>
 	var editor = new FroalaEditor('#flora');		
 </script>
-{% endblock %}
+
+{% endblock %} 

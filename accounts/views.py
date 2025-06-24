@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
-from .models import HotelUser, HotelVendor, Hotel
+from .models import HotelUser, HotelVendor, Hotel,  Ameneties, HotelImages
 from django.db.models import Q
 from django.contrib import messages
 from .utils import generateRandomToken, sendEmailToken, sendOTPtoEmail
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 import random
 from django.contrib.auth.decorators import login_required
 from .utils import generateslug
+from django.http import HttpResponseRedirect
 # Create your views here.
 def login_page(request):
     if request.method == 'POST':
@@ -184,30 +185,97 @@ def register_vendor(request):
 
 @login_required(login_url='login_vendor')
 def dashboard(request):
-    return render(request, 'vendor/vendor_dashboard.html')
+    context = {'hotels':Hotel.objects.filter(hotel_owner=request.user)}
+    return render(request, 'vendor/vendor_dashboard.html', context)
 
 @login_required(login_url='login_vendor')
 def add_hotel(request):
     if request.method == "POST":
-        hotel_name = request.POST.get('hotel-name')
+        hotel_name = request.POST.get('hotel_name')
         hotel_description = request.POST.get('hotel_description')
-        ameneties = request.POST.get('ameneties')
-        hotel_price = request.POST.get('hotel_price')
-        hotel_offer_price = request.POST.get('hotel_offer_price')
-        hotel_location = request.POST.get('hotel_location')
+        ameneties= request.POST.getlist('ameneties')
+        hotel_price= request.POST.get('hotel_price')
+        hotel_offer_price= request.POST.get('hotel_offer_price')
+        hotel_location= request.POST.get('hotel_location')
         hotel_slug = generateslug(hotel_name)
 
-        Hotel.objects.create(
-            hotel_name = hotel_name,
-            hotel_description = hotel_description,
-            hotel_price = hotel_price,
-            hotel_offer_price = hotel_offer_price,
-            hotel_location = hotel_location,
-            hotel_slug = hotel_slug,
+        hotel_vendor = HotelVendor.objects.get(id = request.user.id) 
 
+        hotel_obj = Hotel.objects.create(
+           hotel_name = hotel_name,
+           hotel_description = hotel_description,
+           hotel_price = hotel_price,
+           hotel_offer_price = hotel_offer_price,
+           hotel_location = hotel_location,
+           hotel_slug = hotel_slug,
+           hotel_owner = hotel_vendor
         )
-        messages.success(request, "Hotel created")
-        return redirect('/account/dashboard/')
+
+        for ameneti in ameneties:
+            ameneti = Ameneties.objects.get(id = ameneti)
+            hotel_obj.ameneties.add(ameneti)
+            hotel_obj.save()
+
+            
+        messages.success(request, "Hotel Created")
+        return redirect('/account/add_hotel/')
 
 
-    return render(request, 'vendor/add_hotel.html')
+    ameneties = Ameneties.objects.all()
+
+    return render(request, 'vendor/add_hotel.html', context = {'ameneties' : ameneties})        
+
+
+@login_required(login_url='login_vendor')
+def upload_images(request, slug):
+    hotel_obj = Hotel.objects.get(hotel_slug = slug)
+    if request.method == "POST":
+        image = request.FILES['image']
+        print(image)
+        HotelImages.objects.create(
+            hotel = hotel_obj,
+            image = image
+        )
+        return HttpResponseRedirect(request.path_info)
+    return render(request, 'vendor/upload_images.html', context={'images' : hotel_obj.hotel_images.all()})
+
+@login_required(login_url='login_vendor')
+def delete_image(request, id):
+    print("#######")
+    print(id)
+    print("#######")
+    hotel_image = HotelImages.objects.get(id = id)
+    hotel_image.delete()
+    messages.success(request, " Hotel Image deleted")
+    return redirect('/account/dashboard/')
+
+
+
+@login_required(login_url='login_vendor')
+def edit_hotel(request, slug):
+    hotel_obj = Hotel.objects.get(hotel_slug = slug)
+    if request.user.id != hotel_obj.hotel_owner.id:
+        return HttpResponse("You are not authorized")
+    if request.method == "POST":
+        hotel_name = request.POST.get('hotel_name')
+        hotel_description = request.POST.get('hotel_description')
+        hotel_price= request.POST.get('hotel_price')
+        hotel_offer_price= request.POST.get('hotel_offer_price')
+        hotel_location= request.POST.get('hotel_location')
+        hotel_obj.hotel_name = hotel_name
+        hotel_obj.hotel_description = hotel_description
+        hotel_obj.hotel_price = hotel_price
+        hotel_obj.hotel_offer_price = hotel_offer_price
+        hotel_obj.hotel_location = hotel_location
+        hotel_obj.save()
+        messages.success(request, "Hotel details updated")
+        
+        return HttpResponseRedirect(request.path_info)
+    ameneties = Ameneties.objects.all()
+    return render(request, 'vendor/edit_hotel.html', context={'hotel': hotel_obj,'ameneties' : ameneties })
+
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Logout successfull")
+    return redirect('/account/login-vendor/')
