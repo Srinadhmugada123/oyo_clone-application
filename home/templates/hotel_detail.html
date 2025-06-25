@@ -1,0 +1,26 @@
+{% extends "utils/base.html" %}
+{% block start %}
+<div class="container mt-5">
+<div class="card-body">
+    <h5 class="card-title">{{hotel.hotel_name}}</h5>
+    Price<span class="badge text-bg-danger">{{hotel.hotel_price}}</span>
+    offerPrice<span class="badge text-bg-success">{{hotel.hotel_offer_price}}</span>
+    <p>{{hotel.hotel_location}}</p>
+    <span class="badge text-bg-primary">🏊Swimming Pool</span>
+    <span class="badge text-bg-primary">AC</span>
+
+    <P class="mt-5">{{hotel.hotel_description | safe}}</P>
+    <div class="row">
+        {% for image in hotel.hotel_images.all %}
+        <div class="col-2">
+            <img src="/media/{{image.image}}" style="height: 150px; width: 180px;">
+        </div>
+        {% endfor %}
+    </div>
+
+    <button class="btn btn-danger mt-5">Book now</button>
+
+</div>
+</div>
+
+{% endblock %}

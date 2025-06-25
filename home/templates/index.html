@@ -1,64 +1,43 @@
 {% extends "utils/base.html" %}
 {% block start %}
 <div class="container mt-5 pt-5 pb-5">
+  <div class="col-6 mx-auto">
+    <form class="d-flex">
+      <input type="text" name="search" class="form-control" placeholder="Search">
+      <select class="form-control" name="sort_by">
+        <option value="">Choose</option>
+        <option value="sort_low">sort by low to high</option>
+        <option value="sort_high">sort by high to low</option>
+      </select>
+      <button type="submit" class="btn btn-warning mt-1">Search</button>
+    </form>
+  </div>
     <div class="row">
-        <div class="col-md-3">
+      {% for hotel in hotels %}
+        <div class="col-md-3 mt-3">
             <div class="card shadow" style="width: 18rem;">
-                <img src="https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">The Grand</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="{% url 'hotel_details' hotel.hotel_slug %}">
+                {% if hotel.hotel_images.first %}
+              <img src="/media/{{hotel.hotel_images.first.image}}" class="card-img-top" alt="...">
+               {% else %}
 
+               <img src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" class="card-img-top" alt="...">
+{% endif %}
+                <div class="card-body">
+                  <h5 class="card-title">{{hotel.hotel_name}}</h5>
+                  Price<span class="badge text-bg-danger">{{hotel.hotel_price}}</span>
+                  offerPrice<span class="badge text-bg-success">{{hotel.hotel_offer_price}}</span>
+                  <p>{{hotel.hotel_location}}</p>
                   <span class="badge text-bg-primary">🏊Swimming Pool</span>
                   <span class="badge text-bg-primary">AC</span>
 
-                </div>
-              </div>  
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow" style="width: 18rem;">
-                <img src="https://media.istockphoto.com/id/146765403/photo/a-luxurious-florida-beach-hotel-during-sunrise.jpg?s=612x612&w=0&k=20&c=pxw9Q78KbvqV6_pS_C-v_m6S_WQjKWLBSdqgRtqMUUg=" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Royal</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-
-                  <span class="badge text-bg-primary">Complimentary Breakfast🍽️</span>
-                  <span class="badge text-bg-primary">Gym</span>
+      
 
                 </div>
-              </div>
+                </a>
+            </div>  
         </div>
-
-
-        <div class="col-md-3">
-            <div class="card shadow" style="width: 18rem;">
-                <img src="https://media.istockphoto.com/id/119926339/photo/resort-swimming-pool.jpg?s=612x612&w=0&k=20&c=9QtwJC2boq3GFHaeDsKytF4-CavYKQuy1jBD2IRfYKc=" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Pinnacle</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-
-                  <span class="badge text-bg-primary">❄️ Air Conditioned Rooms</span>
-                  <span class="badge text-bg-primary">24/7 Food </span>
-
-                </div>
-              </div>
-        </div>
-
-
-        <div class="col-md-3">
-            <div class="card shadow" style="width: 18rem;">
-                <img src="https://www.ammoaresort.com/uploads/images/768/316_R1294.jpg?v=202404121624" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Shaab Hotel</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-
-                  <span class="badge text-bg-primary">🧖 Spa & Wellness Center</span>
-                  <span class="badge text-bg-primary">Pub</span>
-
-                </div>
-              </div>
-        </div>
+      {% endfor %}
     </div>
 </div>
 

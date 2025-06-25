@@ -218,7 +218,7 @@ def add_hotel(request):
 
             
         messages.success(request, "Hotel Created")
-        return redirect('/account/add_hotel/')
+        return redirect('/account/add-hotel/')
 
 
     ameneties = Ameneties.objects.all()
