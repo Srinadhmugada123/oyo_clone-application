@@ -278,4 +278,4 @@ def edit_hotel(request, slug):
 def logout_view(request):
     logout(request)
     messages.success(request, "Logout successfull")
-    return redirect('/account/login-vendor/')
+    return redirect('/account/login/')

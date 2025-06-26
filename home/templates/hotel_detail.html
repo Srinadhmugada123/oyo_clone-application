@@ -17,8 +17,25 @@
         </div>
         {% endfor %}
     </div>
+    {% if request.user.is_authenticated  %}
+    <form method="POST" action="{% url 'hotel_details' hotel.hotel_slug %}">
+        {% include "utils/alerts.html" %}
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleInputEmail" class="form-label">Start Date</label>
+            <input type="date" name="start_date" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail" class="form-label">End Date</label>
+            <input type="date" name="end_date" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-danger mt-5">Book now</button>
+    </form>
 
-    <button class="btn btn-danger mt-5">Book now</button>
+    
+    {% else %}
+    <a href="{% url 'login_page' %}" class="btn btn-success">Login</a>
+    {% endif %}
 
 </div>
 </div>
